@@ -33,9 +33,13 @@ split_event_log <- function(eventlog, cluster_assignment) {
 
   eventlog_df <- as_tibble(eventlog) %>%
     dplyr::rename(case_id = attributes(eventlog)$case_id,
+                  activity_id = attributes(eventlog)$activity_id,
+                  activity_instance_id = attributes(eventlog)$activity_instance_id,
+                  lifecycle_id = attributes(eventlog)$lifecycle_id,
                   timestamp = attributes(eventlog)$timestamp,
-                  activity_id = attributes(eventlog)$activity_id) %>%
-    dplyr::select(case_id, timestamp, activity_id) %>%
+                  resource_id = attributes(eventlog)$resource_id
+    ) %>%
+    dplyr::select(case_id, activity_id, activity_instance_id, lifecycle_id, timestamp, resource_id) %>%
     unique() %>%
     dplyr::inner_join(cluster_assignment, by = "case_id")
 
@@ -43,17 +47,45 @@ split_event_log <- function(eventlog, cluster_assignment) {
 
   log_list <- lapply(clusters, function(x) {
 
-    filtered_eventlog_df <- eventlog_df %>%
-      dplyr::filter(cluster == x)
-
-    bupaR::activities_to_eventlog(filtered_eventlog_df,
-                                case_id = "case_id",
-                                activity_id = "activity_id",
-                                timestamp = "timestamp")
-
+    eventlog_df %>%
+      dplyr::filter(cluster == x) %>%
+      eventlog(case_id = "case_id",
+               activity_id = "activity_id",
+               activity_instance_id = "activity_instance_id",
+               lifecycle_id = "lifecycle_id",
+               timestamp = "timestamp",
+               resource_id = "resource_id")
   })
 
   names(log_list) <- clusters
 
   return(log_list)
+
+  # colnames(cluster_assignment) <- c("case_id", "cluster")
+  #
+  # eventlog_df <- as_tibble(eventlog) %>%
+  #   dplyr::rename(case_id = attributes(eventlog)$case_id,
+  #                 timestamp = attributes(eventlog)$timestamp,
+  #                 activity_id = attributes(eventlog)$activity_id) %>%
+  #   dplyr::select(case_id, timestamp, activity_id) %>%
+  #   unique() %>%
+  #   dplyr::inner_join(cluster_assignment, by = "case_id")
+  #
+  # clusters <- sort(unique(eventlog_df$cluster))
+  #
+  # log_list <- lapply(clusters, function(x) {
+  #
+  #   filtered_eventlog_df <- eventlog_df %>%
+  #     dplyr::filter(cluster == x)
+  #
+  #   bupaR::activities_to_eventlog(filtered_eventlog_df,
+  #                               case_id = "case_id",
+  #                               activity_id = "activity_id",
+  #                               timestamp = "timestamp")
+  #
+  # })
+  #
+  # names(log_list) <- clusters
+  #
+  # return(log_list)
 }

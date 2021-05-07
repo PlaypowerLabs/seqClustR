@@ -23,16 +23,18 @@
 #' }
 #' @import dplyr
 #' @export
-seq_kmeans_clustering <- function(eventlog, centers, iter.max, nstart,
-                                  algorithm, trace){
+seq_kmeans_clustering <- function(eventlog, centers = 2, iter.max = 10, nstart = 1,
+                                  algorithm = c("Hartigan-Wong", "Lloyd", "Forgy",
+                                                "MacQueen"), trace = FALSE){
 
   df <- as_tibble(eventlog) %>%
-    rename(case_id = attributes(eventlog)$case_id, timestamp = attributes(eventlog)$timestamp,
+    rename(case_id = attributes(eventlog)$case_id,
+           timestamp = attributes(eventlog)$timestamp,
            activity_id = attributes(eventlog)$activity_id) %>%
-    group_by(studentid, case_id, activity_id) %>%
+    group_by(case_id, activity_id) %>%
     summarise(n_instances = n()) %>%
     ungroup() %>%
-    group_by(studentid, case_id) %>%
+    group_by(case_id) %>%
     mutate(percentage_instances = n_instances/sum(n_instances)*100) %>%
     ungroup() %>%
     select(-n_instances) %>%
@@ -40,7 +42,7 @@ seq_kmeans_clustering <- function(eventlog, centers, iter.max, nstart,
 
   km_mat <- as.matrix(df[, 3:ncol(df)])
 
-  km_mod <- kmeans(x = km_mat, ...)
+  km_mod <- kmeans(x = km_mat, centers, iter.max, nstart, algorithm, trace)
 
   cluster_df <- df %>%
     select(case_id) %>%

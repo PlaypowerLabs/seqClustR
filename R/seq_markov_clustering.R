@@ -49,7 +49,7 @@ seq_markov_clustering <- function(eventlog, informat, alphabet, states, id, weig
 
   seqs <- seqHMM::seqdef(as.data.frame(df), var = 2, stsep = ",", ...)
 
-  mod <- seqHMM::build_mmm(seqs, ...)
+  mod <- seqHMM::build_mmm(seqs, n_clusters, ...)
 
   # fitting model
 

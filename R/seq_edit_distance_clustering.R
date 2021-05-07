@@ -27,6 +27,7 @@
 seq_edit_distance_clustering <- function(eventlog, method, weight, q, p, bt,
                                          nthread){
 
+
   df <- as_tibble(eventlog) %>%
     rename(case_id = attributes(eventlog)$case_id,
            timestamp = attributes(eventlog)$timestamp,
@@ -52,30 +53,30 @@ seq_edit_distance_clustering <- function(eventlog, method, weight, q, p, bt,
 
   plot(hc_mod, labels = FALSE, main = "", xlab = "", sub = "")
 
-  cut_by <- NULL
+  cut_by <- ''
 
   while(!cut_by %in% c('1', '2')){
-  cut_by <- readline(prompt = "Please select an option:\n1. Cut by number of groups\n2. Cut by height")
+    cut_by <- readline(prompt = "Please select an option:\n1. Cut by number of groups\n2. Cut by height\n")
   }
 
-  cluster_eventlog <- function(x, m, ...) {
+  cluster_eventlog <- function(x, m, k = NULL, h = NULL) {
 
-    stopifnot(x %hascols% c("caseid", "activity", "completeTime"))
-
-    stopifnot(class(m) == "hclust")
+    # stopifnot(x %hascols% c("caseid", "activity", "completeTime"))
+    #
+    # stopifnot(class(m) == "hclust")
 
     # cut tree at a specific place to generate cluster assignments
-    clusters <- cutree(m, ...)
+    clusters <- cutree(m, k, h)
 
     # make log with cluster information
     x %>%
-      mutate_(cluster = ~ unname(clusters[as.character(case_id)]))
+      mutate(cluster = unname(clusters[as.character(case_id)]))
   }
 
   if(cut_by == 1){
-    n_groups <- NULL
+    n_groups <- 0
     while(!is.integer(n_groups) && n_groups <= 1){
-    n_groups <- readline(prompt = "Please enter the desired number of groups.")
+      n_groups <- as.integer(readline(prompt = "Please enter the desired number of groups.\n"))
     }
 
     cluster_df <- cluster_eventlog(df, hc_mod, k = n_groups) %>%
@@ -83,9 +84,9 @@ seq_edit_distance_clustering <- function(eventlog, method, weight, q, p, bt,
       unique()
   }
   else if(cut_by == 2){
-    height <- NULL
-    while(!is.numeric(height)){
-    height <- readline(prompt = "Please enter the height where the tree should be cut.")
+    height <- 0
+    while(height <= 0){
+      height <- as.integer(readline(prompt = "Please enter the height where the tree should be cut.\n"))
     }
 
     cluster_df <- cluster_eventlog(df, hc_mod, h = height) %>%

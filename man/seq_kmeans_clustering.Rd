@@ -4,7 +4,14 @@
 \alias{seq_kmeans_clustering}
 \title{Create clusters using K-Means Method}
 \usage{
-seq_kmeans_clustering(eventlog, centers, iter.max, nstart, algorithm, trace)
+seq_kmeans_clustering(
+  eventlog,
+  centers = 2,
+  iter.max = 10,
+  nstart = 1,
+  algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen"),
+  trace = FALSE
+)
 }
 \arguments{
 \item{eventlog}{An event log object containing case, activity and timestamp
