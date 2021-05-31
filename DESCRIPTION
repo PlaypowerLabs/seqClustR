@@ -1,0 +1,23 @@
+Package: seqClustR
+Type: Package
+Title: Generate Clusters from Sequence Data
+Version: 0.1.0
+Authors@R: c(
+    person("Aditya", "Sharma", email = c("aditya@playpowerlabs.com"), role = c("aut", "cre")),
+    person("Nirmal", "Patel", email = "nirmal@playpowerlabs.com", role = "aut"))
+Description: seqClustR package provides the means to generate and extract 
+    clusters from sequence data using different clustering algorithms. By 
+    passing the data in a specific format you could try out different 
+    clustering algorithms on your sequence data at one place which would save
+    some time and effort required to prepare data for each algorithm.
+License: GPL
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 3.6.3)
+Imports: 
+    dplyr,
+    dtwclust,
+    stringdist,
+    seqHMM,
+    bupaR
+RoxygenNote: 7.1.1
