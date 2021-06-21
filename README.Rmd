@@ -1,10 +1,24 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
 # seqClustR
 
 <!-- badges: start -->
 <!-- badges: end -->
-seqClustR is a sequence clustering package: it provides access to different clustering algorithms to perform sequence clustering on one common data format.
+
+seqClustR is a sequence clustering package: it provides access to different clustering algorithms to perform sequence clustering on one common data format. 
 
 # Overview
 
@@ -20,21 +34,20 @@ Install the development version from GitHub with:
 # install.packages("devtools")
 devtools::install_github("aditya9352/seqClustR")
 ```
-
 ## Usage
 
-The package uses [event log](https://www.bupar.net/creating_eventlogs.html) as an input for the data. Event log are very commonly used to store the user behavior data. They indicate the sequence of actions a user takes over time, along with added metadata of the event.
+The package uses [event log](https://www.bupar.net/creating_eventlogs.html) as an input for the data. Event log are very commonly used to store the user behavior data. They indicate the sequence of actions a user takes over time, along with added metadata of the event. 
 
 Once the data is prepared in the event log format, we can run one of the following sequence clustering algorithms:
 
-1.  **Edit Distance Clustering** - *seq\_edit\_distance\_clustering*
-2.  **Markov Model Based Clustering** - *seq\_markov\_clustering*
-3.  **Dynamic Time Warping** - *seq\_dtw\_clustering*
-4.  **K-Means Clustering** - *seq\_kmeans\_clustering*
+1. **Edit Distance Clustering** - *seq_edit_distance_clustering*
+2. **Markov Model Based Clustering** - *seq_markov_clustering*
+3. **Dynamic Time Warping** - *seq_dtw_clustering*
+4. **K-Means Clustering** - *seq_kmeans_clustering*
 
-The output of the function would be a list containing the fitted model and a data frame having the case to cluster assigned mapping. To do further analysis on individual clusters, we need event logs for each cluster for which we have written a function *split\_event\_log* which takes event logs and the clusters assigned data frame as inputs, and returns a list of event log by cluster.
+The output of the function would be a list containing the fitted model and a data frame having the case to cluster assigned mapping. To do further analysis on individual clusters, we need event logs for each cluster for which we have written a function *split_event_log* which takes event logs and the clusters assigned data frame as inputs, and returns a list of event log by cluster.
 
-``` r
+```{r example, warning = FALSE, results='hide', eval=FALSE}
 library(tidyverse)
 library(bupaR)
 library(seqClustR)
@@ -58,11 +71,12 @@ cluster <- seq_edit_distance_clustering(
 
 event_log_2 <- split_event_log(eventlog, 
                                cluster$cluster_assignment)
+
 ```
 
 You can visualize the clusters using [fuzzymineR](https://github.com/nirmalpatel/fuzzymineR) package.
 
-``` r
+```{r viz, warning=FALSE, results='hide', eval=FALSE}
 
 library(fuzzymineR)
 
@@ -74,4 +88,5 @@ viz_fuzzy_model(metrics = metrics,
                 node_sig_threshold = 0.1,
                 edge_sig_threshold = 0.3,
                 edge_sig_to_corr_ratio = 1)
+
 ```
