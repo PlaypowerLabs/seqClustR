@@ -6,6 +6,8 @@
 <!-- badges: end -->
 seqClustR is a sequence clustering package: it provides access to different clustering algorithms to perform sequence clustering on one common data format.
 
+Related paper: [seqClustR: An R Package for Sequence Clustering](https://www.researchgate.net/profile/Aditya-Sharma-26/publication/353040940_seqClustR_An_R_Package_for_Sequence_Clustering/links/60e5a626299bf1b0319c7402/seqClustR-An-R-Package-for-Sequence-Clustering.pdf)
+
 # Overview
 
 Sequence clustering is a data mining technique that groups similar sequences into clusters based on their similarities. Sequence clustering is useful when there are unknown number of similar sequences that need to be identified to gain valuable insights.
