@@ -20,7 +20,7 @@ Install the development version from GitHub with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("aditya9352/seqClustR")
+devtools::install_github("PlaypowerLabs/seqClustR")
 ```
 
 ## Usage
